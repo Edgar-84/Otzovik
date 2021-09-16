@@ -1,12 +1,8 @@
 {% extends 'company/base.html' %}
-
+{% load company_tags %}
 {% block content %}
+
 <h1>{{title}}</h1>
-{% for c in cats %}
-    {% if c.pk == cat_selected %}
-        <li class="selected">{{c.name}}</li>
-    {% else %}
-        <li><a href="{{ c.get_absolute_url }}">{{c.name}}</a></li>
-    {% endif %}
-{% endfor %}
+
+{% show_categories cat_selected=cat_selected %}
 {% endblock %}

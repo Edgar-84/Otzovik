@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 
 from .models import *
@@ -10,20 +10,15 @@ menu = [{'title': "Главная страница", 'url_name': 'home'},
 
 def main_page(request):
     """This main page handler"""
-    post = Company.objects.all()
     context = {
-        'posts': post,
         'menu': menu,
         'title': 'Главная страница'
     }
-
     return render(request, 'company/index.html', context=context)
 
 def categories(request):
     """This categories of company handler"""
-    cats = Category.objects.all()
     context = {
-        'cats': cats,
         'menu': menu,
         'title': "Категории компаний",
         'cat_selected': 0,
@@ -31,7 +26,7 @@ def categories(request):
     return render(request, 'company/categories.html', context=context)
 
 def add_company(request):
-    return HttpResponse('Добавление компании')
+    return render(request, 'company/addpage.html', {'menu': menu, 'title': 'Добавление статьи'})
 
 def info_about_site(request):
     return HttpResponse('Информация о сайте')
@@ -39,25 +34,25 @@ def info_about_site(request):
 def login(request):
     return HttpResponse('Регистрация пользователя')
 
-def show_post(request, post_id):
-    return HttpResponse(f'Отображение статьи с id = {post_id}')
-
-def show_category(request, cat_id):
-
-    post = Company.objects.filter(cat_id=cat_id)
-    cats = Category.objects.all()
-
-    if len(post) == 0:
-        raise Http404()
-
+def show_post(request, post_slug):
+    post = get_object_or_404(Company, slug=post_slug)
     context = {
-        'posts': post,
-        'cats': cats,
+        'post': post,
         'menu': menu,
-        'title': 'Отображение по категории',
-        'cat_selected': cat_id,
+        'title': post.title,
+        'cat_selected': post.cat_id,
     }
+    return render(request, 'company/post.html', context=context)
 
+def show_category(request, cat_slug):
+    # if len(post) == 0:
+    #      raise Http404()
+    #name_category = Category.name(pk=cat_id)
+    context = {
+        'menu': menu,
+        'title': 'Выбранная категория',
+        'cat_selected': cat_slug,
+    }
     return render(request, 'company/index.html', context=context)
 
 

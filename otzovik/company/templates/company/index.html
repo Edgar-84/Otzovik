@@ -4,7 +4,7 @@
 <h1>{{title}}</h1>
 
 <ul class="list-articles">
-{% getcompany filter=cat_selected as companies %}
+
     {% for company in companies %}
         {% if company.photo %}
             <p><img class="img-article-left thumb" src="{{company.photo.url}}"></p>

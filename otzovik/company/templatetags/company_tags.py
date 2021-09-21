@@ -10,12 +10,12 @@ def get_categories(filter=None):
     else:
         return Category.objects.filter(pk=filter)
 
-@register.simple_tag(name='getcompany')
-def get_company(filter=None):
-    if not filter:
-        return Company.objects.all()
-    else:
-        return Company.objects.filter(cat__slug=filter)
+# @register.simple_tag(name='getcompany')
+# def get_company(filter=None):
+#     if not filter:
+#         return Company.objects.all()
+#     else:
+#         return Company.objects.filter(cat__slug=filter)
 
 @register.inclusion_tag('company/list_categories.html')
 def show_categories(sort=None, cat_selected=0):

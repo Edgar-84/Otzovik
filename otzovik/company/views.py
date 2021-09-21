@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404
-from django.views.generic import ListView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView
 
 from .forms import *
 from .models import *
@@ -12,9 +13,10 @@ menu = [{'title': "Главная страница", 'url_name': 'home'},
         {'title': "Регистрация", 'url_name': 'login'}]
 
 class main_page(ListView):
+
     model = Company
     template_name = 'company/index.html'
-    context_object_name = 'post'
+    context_object_name = 'companies'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -35,52 +37,53 @@ def categories(request):
     }
     return render(request, 'company/categories.html', context=context)
 
-def add_company(request):
-    """This handler for add company"""
 
-    if request.method == 'POST':
-        form = add_company_form(request.POST, request.FILES)
-        if form.is_valid():
-            #print(form.cleaned_data)
-            form.save()
-            return redirect('home')
-    else:
-        form = add_company_form()
-    return render(request, 'company/addcompany.html', {'form': form, 'menu': menu, 'title': 'Добавление статьи'})
+class add_company(CreateView):
+    form_class = add_company_form
+    template_name = 'company/addcompany.html'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавление статьи'
+        context['menu'] = menu
+        return context
+
 
 def info_about_site(request):
 
     return HttpResponse('Информация о сайте')
 
 def login(request):
-    """This handler for login users"""
 
     return HttpResponse('Регистрация пользователя')
 
-def show_post(request, post_slug):
-    """This handler for show post"""
-    post = get_object_or_404(Company, slug=post_slug)
-    context = {
-        'post': post,
-        'menu': menu,
-        'title': post.title,
-        'cat_selected': post.cat_id,
-    }
-    return render(request, 'company/post.html', context=context)
+class show_post(DetailView):
+    model = Company
+    template_name = 'company/post.html'
+    slug_url_kwarg = 'post_slug'
+    context_object_name = 'post'
 
-def show_category(request, cat_slug):
-    """This handler for displaying category"""
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = context['post'].title
+        context['menu'] = menu
+        return context
 
-    # if len(post) == 0:
-    #      raise Http404()
-    #name_category = Category.name(pk=cat_id)
-    context = {
-        'menu': menu,
-        'title': 'Выбранная категория',
-        'cat_selected': cat_slug,
-    }
-    return render(request, 'company/index.html', context=context)
+class show_category(ListView):
+    model = Company
+    template_name = 'company/index.html'
+    context_object_name = 'companies'
+    allow_empty = False
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Категория - ' + str(context['companies'][0].cat)
+        context['menu'] = menu
+        return context
+
+    def get_queryset(self):
+        return Company.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
 
 
 def pageNotFound(request, exception):

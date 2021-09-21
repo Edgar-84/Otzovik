@@ -9,6 +9,7 @@ class Company(models.Model):
     url_for_site = models.URLField(max_length=100, verbose_name='Ссылка на сайт компании')
     photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name='Фото')
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='Дата создания')
+    time_update = models.DateTimeField(auto_now=True, verbose_name="Время изменения")
     content = models.TextField(verbose_name="Описание")
     is_published = models.BooleanField(default=True, verbose_name='Публикация')
     cat = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name='Категория')
@@ -22,7 +23,7 @@ class Company(models.Model):
     class Meta:
         verbose_name = 'Компании'
         verbose_name_plural = 'Компании'
-        ordering = ['title']
+        ordering = ['-time_create', 'title']
 
 class Category(models.Model):
     """This table with category of company"""

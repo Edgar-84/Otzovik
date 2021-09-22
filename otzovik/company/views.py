@@ -25,7 +25,7 @@ class main_page(DataMixin, ListView):
     def get_queryset(self):
         """This method shows only the published ones"""
 
-        return Company.objects.filter(is_published=True)
+        return Company.objects.filter(is_published=True).select_related('cat')
 
 
 class categories(DataMixin, ListView):
@@ -92,14 +92,15 @@ class show_category(DataMixin, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Категория - ' + str(context['companies'][0].cat),
-                                      cat_selected=context['companies'][0].cat_id)
+        c = Category.objects.get(slug=self.kwargs['cat_slug'])
+        c_def = self.get_user_context(title='Категория - ' + str(c.name),
+                                      cat_selected=c.pk)
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
         """This method filters companies by categories and publications"""
 
-        return Company.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
+        return Company.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
 
 class Register_user(DataMixin, CreateView):
     """This class performs user register his account"""

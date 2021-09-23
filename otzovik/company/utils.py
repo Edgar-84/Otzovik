@@ -9,7 +9,7 @@ menu = [{'title': "Главная страница", 'url_name': 'home'},
 ]
 
 class DataMixin:
-    paginate_by = 3
+    paginate_by = 5
 
     def get_user_context(self, **kwargs):
         """This method makes an access to the database, adds new information

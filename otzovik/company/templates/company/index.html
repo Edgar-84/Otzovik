@@ -2,9 +2,6 @@
 {% load company_tags %}
 {% block content %}
 <h1>{{title}}</h1>
-
-<ul class="list-articles">
-
     {% for company in companies %}
         {% if company.photo %}
             <p><img class="img-article-left thumb" src="{{company.photo.url}}" width="250"></p>
@@ -13,11 +10,8 @@
     {% autoescape on %}
     {{company.content|linebreaks|truncatewords:10}}
     {% endautoescape %}
-            <div class="clear"></div>
-            <p class="link-read-post"><a href="{{ company.get_absolute_url }}">Подробнее</a></p>
-            </li>
-    {% endfor %}
-</ul>
 
+            <p class="link-read-post"><a href="{{ company.get_absolute_url }}">Подробнее</a></p>
+    {% endfor %}
 {% endblock %}
 

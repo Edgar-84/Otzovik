@@ -3,7 +3,7 @@ from django.contrib.auth.views import LoginView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, FormView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import *
@@ -39,15 +39,6 @@ class categories(DataMixin, ListView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Категории компаний', cat_selected=0)
         return dict(list(context.items()) + list(c_def.items()))
-# def categories(request):
-#     """This categories of company handler"""
-#
-#     context = {
-#         'menu': menu,
-#         'title': "Категории компаний",
-#         'cat_selected': 0,
-#     }
-#     return render(request, 'company/categories.html', context=context)
 
 
 class add_company(LoginRequiredMixin, DataMixin, CreateView):
@@ -56,8 +47,7 @@ class add_company(LoginRequiredMixin, DataMixin, CreateView):
     form_class = add_company_form
     template_name = 'company/addcompany.html'
     success_url = reverse_lazy('home')
-    login_url = reverse_lazy('home')
-
+    login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -82,6 +72,7 @@ class show_post(DataMixin, DetailView):
         c_def = self.get_user_context(title=context['post'].title)
         return dict(list(context.items()) + list(c_def.items()))
 
+
 class show_category(DataMixin, ListView):
     """This class filters and shows companies by category"""
 
@@ -98,8 +89,6 @@ class show_category(DataMixin, ListView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_queryset(self):
-        """This method filters companies by categories and publications"""
-
         return Company.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True).select_related('cat')
 
 class Register_user(DataMixin, CreateView):
@@ -120,6 +109,7 @@ class Register_user(DataMixin, CreateView):
         login(self.request, user)
         return redirect('home')
 
+
 class login_user(DataMixin, LoginView):
     """This class performs user login to the account"""
 
@@ -132,18 +122,27 @@ class login_user(DataMixin, LoginView):
         return dict(list(context.items()) + list(c_def.items()))
 
     def get_success_url(self):
-        """This method will redirect the user to the main page"""
-
         return reverse_lazy('home')
 
 def logout_user(request):
-    """This method will redirect the user to the login form when he logs out of his account"""
 
     logout(request)
     return redirect('login')
 
 
-def pageNotFound(request, exception):
-    """This error handler 404 """
+class contant_form(DataMixin, FormView):
+    form_class = contact_form
+    template_name = 'company/contact.html'
+    success_url = reverse_lazy('home')
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = self.get_user_context(title='Обратная связь')
+        return dict(list(context.items()) + list(c_def.items()))
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return redirect('home')
+
+def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')

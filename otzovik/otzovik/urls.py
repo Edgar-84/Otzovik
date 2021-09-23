@@ -23,7 +23,8 @@ from company.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('company.urls'))
+    path('captcha/', include('captcha.urls')),
+    path('', include('company.urls')),
 ]
 
 

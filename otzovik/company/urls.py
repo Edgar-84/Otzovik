@@ -1,4 +1,5 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from .views import *
 
@@ -12,4 +13,5 @@ urlpatterns = [
     path('register/', Register_user.as_view(), name='register'),
     path('post/<slug:post_slug>/', show_post.as_view(), name='post'),
     path('category/<slug:cat_slug>/', show_category.as_view(), name='category'),
+    path('contact/', contant_form.as_view(), name='contact'),
 ]

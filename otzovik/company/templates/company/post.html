@@ -1,12 +1,15 @@
 {% extends 'company/base.html' %}
 {% load static %}
 {% block content %}
+<div class="features">
 <link rel="stylesheet" href="{% static 'company/css/company.css' %}">
+
     <h1>{{post.title}}</h1>
 
 {% if post.photo %}
-<p><img class="img-article-left" src="{{post.photo.url}}"></p>
+<p><img class="img-thumbnail" class="float-left" src="{{post.photo.url}}"></p>
 {% endif %}
 
-{{post.content|linebreaks}}
-{% endblock %}
+    <p class="main">{{post.content|linebreaks}}</p>
+</div>
+    {% endblock %}

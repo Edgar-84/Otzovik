@@ -1,8 +1,9 @@
 {% extends 'company/base.html' %}
 {% load company_tags %}
 {% block content %}
-
+<div class="features">
 <h1>{{title}}</h1>
 
 {% show_categories cat_selected=cat_selected %}
+</div>
 {% endblock %}

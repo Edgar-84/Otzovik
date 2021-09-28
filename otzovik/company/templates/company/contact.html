@@ -1,17 +1,22 @@
 {% extends 'company/base.html' %}
 
 {% block content %}
+<div class="features">
+    <div class="container">
 <h1>{{title}}</h1>
 
-<form method="post">
+<form role="form" method="post" class="form-horizontal">
     {% csrf_token %}
 
-    <div class="form-error">{{ form.non_field_errors }}</div>
+    <div class="text-warning">{{ form.non_field_errors }}</div>
 
 {% for f in form %}
-<p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}:</label>{{f}}</p>
-<div class="form-error">{{f.errors}}</div>
+<p><label for="{{ f.id_for_label }}" class="control-label col-md-1" >{{f.label}}:</label>{{f}}</p>
+<div class="text-warning">{{f.errors}}</div>
+    <div class="col-md-11"></div>
 {% endfor %}
     <button class='btn btn-warning'>Отправить</button>
 </form>
+</div>
+</div>
 {% endblock %}

@@ -1,9 +1,8 @@
 {% extends 'company/base.html' %}
 {% load company_tags %}
 {% block content %}
-<div class="features">
+<div class="features justify-content-center">
     <h1>{{title}}</h1>
-    <p></p><p></p><p></p><p></p>
     {% for company in companies %}
         {% if company.photo %}
             <p><img class="img-thumbnail" src="{{company.photo.url}}" width="250"></p>

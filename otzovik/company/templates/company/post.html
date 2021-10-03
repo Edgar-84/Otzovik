@@ -5,11 +5,12 @@
 <link rel="stylesheet" href="{% static 'company/css/company.css' %}">
 
     <h1>{{post.title}}</h1>
-
+<div class="row text-align: justify">
 {% if post.photo %}
-<p><img class="img-thumbnail" class="float-left" src="{{post.photo.url}}"></p>
+    <div class="col-3"><p><img class="img-thumbnail" class="float-left" src="{{post.photo.url}}"></p></div>
 {% endif %}
 
-    <p class="main">{{post.content|linebreaks}}</p>
+    <div class="col-6"><p class="main">{{post.content|linebreaks}}</p></div>
+</div>
 </div>
     {% endblock %}

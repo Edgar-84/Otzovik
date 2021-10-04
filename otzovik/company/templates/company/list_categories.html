@@ -1,17 +1,8 @@
+{% load static %}
 {% for c in cats  %}
-    {% if c.pk == cat_selected %}
-<li><i class="fab fa-artstation"></i>{{c.name}}</li>
-    {% else %}
-<div class="container">
-        <h1>{{title}}</h1>
-            <div class="card-columns">
-                <div class="card">
-                    <div class="card-body text-center">
-                        <p class="card-text"><li><a href="{{ c.get_absolute_url }}">{{c.name}}</a></li></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    {% endif %}
-{% endfor %}
+    <div class="card text-center" style="width: 15rem;">
+    <img class="card-img-top" src="{{ c.photo.url }}" alt="card image">
+        {{title}}
+<p class="card-text"><li><a href="{{ c.get_absolute_url }}">{{c.name}}</a></li></p>
+    {% endfor %}
+    </div>

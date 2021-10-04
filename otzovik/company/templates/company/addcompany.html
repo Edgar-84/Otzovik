@@ -1,8 +1,9 @@
 {% extends 'company/base.html' %}
 
 {% block content %}
-<h1>{{title}}</h1>
 
+<div class="sticky-container">
+<h1>{{title}}</h1>
 <form action="{% url 'add_company' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-error">{{ form.non_field_errors }}</div>
@@ -12,5 +13,5 @@
 {% endfor %}
     <button class='btn btn-warning'>Добавить</button>
 </form>
-
+</div>
 {% endblock %}

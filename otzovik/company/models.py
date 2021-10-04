@@ -30,6 +30,7 @@ class Category(models.Model):
 
     name = models.CharField(max_length=100, db_index=True, verbose_name='Категория')
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name='URL')
+    photo = models.ImageField(upload_to="photos/%Y/%m/%d/", verbose_name='Фото', null=True)
 
     def __str__(self):
         return self.name
